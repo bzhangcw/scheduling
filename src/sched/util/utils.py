@@ -5,12 +5,34 @@ Solver of Union[copt, gurobi]
 @author: chuwen <chuwzhang@gmail.com>
 """
 import logging
+import os
+from logging.handlers import TimedRotatingFileHandler as TRFH
+
+import pandas as pd
+
+LOG_PATH = 'log'
+FORMAT = '[%(name)s:%(levelname)s] [%(asctime)s] %(message)s'
+logging.basicConfig(format=FORMAT)
+if LOG_PATH is not None:
+    if not os.path.exists(LOG_PATH):
+        os.makedirs(LOG_PATH)
+handler = TRFH(f'{LOG_PATH}/sched.log',
+               when='H',
+               interval=1,
+               backupCount=7,
+               encoding='utf8')
+handler.setFormatter(logging.Formatter(FORMAT))
+log = logging.getLogger()
+log.addHandler(handler)
+log.setLevel(logging.INFO)
+# options
+pd.set_option('display.max_columns', None)
 
 # solver sanity check
 BOOL_HAS_COPT = True
 BOOL_HAS_GRB = True
 
-logger = logging.getLogger("sfhub.util")
+logger = logging.getLogger("sched.util")
 try:
     import coptpy
 except ImportError as e:
@@ -33,9 +55,14 @@ except ImportError as e:
     logger.warning('no mosek detected')
 
 
+def cls_deprecated(cls):
+    cls.logger.info("this class is for debugging only")
+    return cls
+
+
 class ModelWrapper(object):
     """
-    a wrapper class to work with different solvers
+    a wrapper class to work with different mathematical solvers
     """
 
     def __init__(self, model=None, object_map=None, solver_name="", name="model", *args, **kwargs):

@@ -310,5 +310,5 @@ def fjsp(m, n, p):
     pass
 
 
-fjsp_preemptive(5, 5, 2, pre=False)
+fjsp_preemptive(50, 10, 5, pre=False)
 # jsp(50, 10)

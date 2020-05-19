@@ -1,1 +1,1 @@
-from .model import *
+from .plain_model import *

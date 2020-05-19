@@ -5,12 +5,12 @@
 #
 # @author: chuwen <chuwen@shanshu.ai>
 import numpy as np
-import pandas as pd
+from typing import *
 
 
 class Instance(object):
     """
-    skeleton object for air cargo model
+    skeleton object
     """
 
     def __init__(self, **kwargs):
@@ -42,11 +42,29 @@ class Machine(Instance):
 
 class Job(Instance):
     """
-    The Job object, maybe upper level `mfg`
+    The Job object
     """
     __slots__ = [
-        'idx', 'quantity', 'item',
+        'idx',
         'release', 'due',
+        'start', 'end',
+        'tasks'
+    ]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        # check sufficiency
+        return f"J@{self.idx}"
+
+    def __lt__(self, other):
+        return self.idx < other.idx
+
+
+class Task(Instance):
+    __slots__ = [
+        'idx',
         'start', 'end',
     ]
 
@@ -59,26 +77,6 @@ class Job(Instance):
 
     def __lt__(self, other):
         return self.idx < other.idx
-
-
-class ColUtil:
-    CLS_MAPPING = {"F": 5, "E": 4, "D2": 3, "D1": 2, "C": 1}
-
-    @classmethod
-    def cls_to_num(cls, col):
-        return cls.CLS_MAPPING.get(col, 1)
-
-    @classmethod
-    def taxiway_to_region(cls, col):
-        try:
-            # todo; use regex instead
-            return col[1]
-        except Exception as e:
-            return col
-
-
-# alias
-cul = ColUtil
 
 
 @np.vectorize
