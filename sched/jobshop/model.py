@@ -1,5 +1,7 @@
+import pickle
 import random
 from collections import defaultdict, namedtuple
+from typing import *
 
 from sched.jobshop.helper import *
 
@@ -62,7 +64,7 @@ class JSP:
 
       max_sec = kwargs.get('max_sec', 20)
       max_sol = kwargs.get('max_sol', 20)
-
+      num_workers = kwargs.get('num_workers', 2)
       # the cp instance
       model = cp_model.CpModel()
 
@@ -156,7 +158,7 @@ class JSP:
       self.cp_solver = solver = cp_model.CpSolver()
       solver.parameters.max_time_in_seconds = max_sec
       solver.parameters.log_search_progress = True
-      solver.parameters.num_search_workers = 2
+      solver.parameters.num_search_workers = num_workers
       self.cp_solution_printer = solution_printer = SatCallBack(makespan, max_sol, max_sec)
       self.cp_status = status = solver.SolveWithSolutionCallback(model, solution_printer)
       self.logger.info('Status = %s' % solver.StatusName(status))
@@ -244,7 +246,7 @@ def sol_to_series(jsp: JSP):
 jsp_generate_random_instance = JSP.rd_instance
 
 if __name__ == '__main__':
-   m, n, p, d = 50, 20, 3, 0.4
+   m, n, p, d = 20, 20, 5, 0.4
    jobs, machines = JSP.rd_instance(m, n, copy=p, density=d)
    jsp = JSP(jobs, machines)
-   jsp.create_cp_model(max_sec=200)
+   jsp.create_cp_model(max_sec=500, num_workers=10)

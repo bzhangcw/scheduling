@@ -173,10 +173,3 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
-.pyre/
-.idea
-
-data
-.idea/
-/data/
