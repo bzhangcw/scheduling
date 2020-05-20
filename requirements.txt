@@ -1,0 +1,7 @@
+ortools~=7.6.7691
+numpy~=1.17.2
+pandas~=0.25.0
+coptpy~=1.1.4
+gurobipy~=8.1.0
+mosek~=9.1.10
+setuptools~=42.0.2

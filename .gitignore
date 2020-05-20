@@ -177,7 +177,6 @@ dmypy.json
 .pyre/
 .idea
 
-
-
-© 2019 GitHub, Inc.
-/.idea/
+data
+.idea/
+/data/

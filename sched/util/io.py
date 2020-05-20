@@ -5,7 +5,6 @@
 #
 # @author: chuwen <chuwen@shanshu.ai>
 import numpy as np
-from typing import *
 
 
 class Instance(object):

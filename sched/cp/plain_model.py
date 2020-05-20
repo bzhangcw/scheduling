@@ -1,5 +1,3 @@
-from sched.util import *
-from typing import *
 import random
 
 from ortools.sat.python import cp_model
