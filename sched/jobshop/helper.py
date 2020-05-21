@@ -32,7 +32,7 @@ class JSPMachine(Machine):
    """
    __slots__ = [
       'idx',
-      'group'
+      'group',
    ]
 
    def __str__(self):
@@ -42,13 +42,14 @@ class JSPMachine(Machine):
 
 class JSPTask(Task):
    __slots__ = [
-      'idx', 'seq', 'machine',
+      'idx', 'seq',
+      'job_id', 'group',
       'start', 'end', 'duration',
    ]
 
    def __str__(self):
       # check sufficiency
-      return f"T{self.idx}@{self.machine}"
+      return f"T{self.idx}@{self.group}"
 
 
 # or-tools helper classes

@@ -8,76 +8,77 @@ import numpy as np
 
 
 class Instance(object):
-    """
-    skeleton object
-    """
+   """
+   skeleton object
+   """
 
-    def __init__(self, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+   def __init__(self, **kwargs):
+      for k, v in kwargs.items():
+         setattr(self, k, v)
 
-    def __hash__(self):
-        return self.__str__().__hash__()
+   def __hash__(self):
+      return self.__str__().__hash__()
 
-    def __repr__(self):
-        return self.__str__()
+   def __repr__(self):
+      return self.__str__()
 
 
 class Machine(Instance):
-    __slots__ = [
-        'idx'
-    ]
+   __slots__ = [
+      'idx'
+   ]
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+   def __init__(self, **kwargs):
+      super().__init__(**kwargs)
 
-    def __str__(self):
-        # check sufficiency
-        return f"M@{self.idx}"
+   def __str__(self):
+      # check sufficiency
+      return f"M@{self.idx}"
 
-    def __lt__(self, other):
-        return self.idx < other.idx
+   def __lt__(self, other):
+      return self.idx < other.idx
 
 
 class Job(Instance):
-    """
-    The Job object
-    """
-    __slots__ = [
-        'idx',
-        'release', 'due',
-        'start', 'end',
-        'tasks'
-    ]
+   """
+   The Job object
+   """
+   __slots__ = [
+      'idx',
+      'release', 'due',
+      'start', 'end',
+      'tasks'
+   ]
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+   def __init__(self, **kwargs):
+      super().__init__(**kwargs)
 
-    def __str__(self):
-        # check sufficiency
-        return f"J@{self.idx}"
+   def __str__(self):
+      # check sufficiency
+      return f"J@{self.idx}"
 
-    def __lt__(self, other):
-        return self.idx < other.idx
+   def __lt__(self, other):
+      return self.idx < other.idx
 
 
+# aka Operation
 class Task(Instance):
-    __slots__ = [
-        'idx',
-        'start', 'end',
-    ]
+   __slots__ = [
+      'idx',
+      'start', 'end',
+   ]
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+   def __init__(self, **kwargs):
+      super().__init__(**kwargs)
 
-    def __str__(self):
-        # check sufficiency
-        return f"T@{self.idx}"
+   def __str__(self):
+      # check sufficiency
+      return f"T@{self.idx}"
 
-    def __lt__(self, other):
-        return self.idx < other.idx
+   def __lt__(self, other):
+      return self.idx < other.idx
 
 
 @np.vectorize
 def serialize(col):
-    return str(col)
+   return str(col)
