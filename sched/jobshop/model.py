@@ -240,19 +240,26 @@ class JSP:
                except:
                   self.logger.warning(f"no task started @{m}")
 
-      data = generate_sections()
-      _dir = f'{fp}/%d' % time.time()
-      os.mkdir(_dir)
-      with open(f'{_dir}/gantt.record', 'w') as f:
-         for line in MERMAID_GANTT_HEADER:
-            f.write(line)
-            f.write('\n')
-         f.write(f"title schedule of (f)jsp\n")
-         for line in data:
-            f.write(line)
-            f.write('\n')
+      try:
+         data = generate_sections()
+         _dir = f'{fp}/%d' % time.time()
+         os.mkdir(_dir)
+         record_path = f'{_dir}/gantt.record'
+         html_path = f'{_dir}/gantt.html'
+         template_path = f'{UTIL_ASSET_PATH}/gantt.template'
+         with open(record_path, 'w') as f:
+            for line in MERMAID_GANTT_HEADER:
+               f.write(line)
+               f.write('\n')
+            f.write(f"title schedule of (f)jsp\n")
+            for line in data:
+               f.write(line)
+               f.write('\n')
+      except Exception as e:
+         self.logger.exception(e)
 
-      # liquid
+      else:
+         render_gantt_html(template_path=template_path, record_path=record_path, fp=html_path)
 
    # ===================
    # utility functions
