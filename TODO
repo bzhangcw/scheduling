@@ -1,13 +1,20 @@
 todo
-- Visualization
-    [x] mermaid records
-    [] add js renderer
-    [] change to pink theme
 
-- Documentation
-    [] finish jsp
+= jsp
+@ visualization
+- [x] mermaid records
+- [x] add template renderer
+- [] change to pink theme
+@ documentation
+- [] finish jsp
+@ more
+- [] continuous
+- [] preemptive?
+- [] integral, mold (tooling)
 
-- More
-    [] continuous
-    [] preemptive?
-    [] integral, mold (tooling)
+= plan
+- [] write the most simple model
+
+= cascade
+@documentation
+- [] formulate the idea for plan & schedule, the whole story
