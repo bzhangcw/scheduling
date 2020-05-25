@@ -13,6 +13,6 @@ def compute():
     m, n, p, d = 5, 10, 1, 0.8
     jobs, machines = JSP.rd_instance(m, n, copy=p, density=d)
     jsp = JSP(jobs, machines)
-    jsp.create_cp_model(max_sec=500, num_workers=10)
+    jsp.cp_create_model(max_sec=500, num_workers=10)
     jsp.cp_to_gantt_mermaid()
     pass

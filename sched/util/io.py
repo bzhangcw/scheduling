@@ -11,7 +11,6 @@ import numpy as np
 UTIL_MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
 UTIL_ASSET_PATH = os.path.join(UTIL_MODULE_PATH, 'assets')
 
-
 class Instance(object):
    """
    skeleton object

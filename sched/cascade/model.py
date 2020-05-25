@@ -7,9 +7,10 @@
 # @modified: brentian (chuwzhang@gmail.com>)
 #    Monday, 25th May 2020 10:22:33 am
 # ....................
-# @description: 
+# @description:
 
 from sched.jobshop import *
 
+
 def generate_random_instance():
-   pass
+  pass

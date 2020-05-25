@@ -1,0 +1,60 @@
+{
+    "python.pythonPath": "/Users/chuwen/anaconda3/bin/python",
+    "editor.fontFamily": "Hack",
+    "editor.tabSize": 2,
+    "psi-header.changes-tracking": {
+        "autoHeader": "autoSave",
+        "changesTracking": true,
+        "isActive": true
+    },
+    "psi-header.config": {
+        "author": "brentian",
+        "authorEmail": "chuwzhang@gmail.com",
+        "copyrightHolder": "C. Zhang",
+        "license": "MIT",
+        "projectname": "arto"
+    },
+    "psi-header.lang-config": [
+        {
+            "begin": "",
+            "end": "",
+            "language": "minizinc",
+            "prefix": "% "
+        },
+        {
+            "begin": "",
+            "end": "",
+            "language": "python",
+            "prefix": "# "
+        },
+        {
+            "begin": "---",
+            "end": "---",
+            "language": "markdown",
+            "prefix": ""
+        },
+        {
+            "begin": "",
+            "end": "",
+            "language": "*",
+            "prefix": "# "
+        }
+    ],
+    "psi-header.templates": [
+        {
+            "language": "*",
+            "template": [
+                "....................",
+                "@license: %<<licensename>>%:~ <<licenseurl>>",
+                "@project: <<projectname>>",
+                "@file: <<filerelativepath>>",
+                "@created: <<filecreated('dddd, Do MMMM YYYY')>>",
+                "@author: <<author>> (<<authoremail>>)",
+                "@modified: <<author>> (<<authoremail>>>)",
+                "   <<dateformat('dddd, Do MMMM YYYY h:mm:ss a')>>",
+                "....................",
+                "@description: "
+            ]
+        }
+    ]
+}
