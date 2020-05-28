@@ -1,0 +1,3 @@
+[submodule "artograph"]
+	path = artograph
+	url = git@github.com:brentian/artograph.git

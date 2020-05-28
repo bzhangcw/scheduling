@@ -5,8 +5,10 @@ todo
 - [x] mermaid records
 - [x] add template renderer
 - [] change to pink theme
+
 @ documentation
 - [] finish jsp
+
 @ more
 - [] continuous
 - [] preemptive?
@@ -18,3 +20,6 @@ todo
 = cascade
 @documentation
 - [] formulate the idea for plan & schedule, the whole story
+
+= add protobuf
+- for each problem class, a protobuf that declares the problem data

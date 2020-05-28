@@ -5,3 +5,6 @@ coptpy~=1.1.4
 gurobipy~=8.1.0
 mosek~=9.1.10
 setuptools~=42.0.2
+jinja2~=2.10.3
+scipy~=1.3.1
+networkx~=2.4

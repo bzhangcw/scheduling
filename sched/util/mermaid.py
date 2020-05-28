@@ -1,5 +1,7 @@
-import jinja2 as jin
 from typing import *
+
+import jinja2 as jin
+
 from .io import UTIL_ASSET_PATH
 
 MERMAID_GANTT_HEADER = [

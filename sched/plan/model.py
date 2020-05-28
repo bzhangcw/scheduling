@@ -15,22 +15,34 @@
 #    combines the MRP the AP (Advanced Planning) systems
 #    it takes into account:
 #    BOM (bill of materials), lead time, ...
-
-
+import functools
 import random
+import pickle
+import time
 from collections import namedtuple
-from typing import *
 
 from sched.util import *
 
+__package__ = 'sched.plan'
 
-class Plan:
+
+class Plan(Problem):
   """
    An instance of Production Planning Problem
   """
-  __name__ = f"{__package__}.JSP"
+
+  __name__ = f"{__package__}.Plan"
   logger = logging.getLogger(__name__)
 
+  instance_container = \
+    namedtuple(
+      'plan_instance',
+      [
+        'bom',
+        'horizon', 'items', 'raws', 'products',
+        'lead_time', 'demand', 'inventory'
+      ]
+    )
   cp_var_container = \
     namedtuple('cp_vars',
                ['task_start',
@@ -53,42 +65,43 @@ class Plan:
                 'makespan'])
 
   def __init__(self,
-               jobs: Dict[Any, JSPJob] = None,
-               machines: Dict[Any, List[JSPMachine]] = None,
+               instance,
                **kwargs):
-    if not (jobs and machines):
+    if not (instance):
       raise ValueError('Cannot initialize the problem')
 
-    self.jobs = jobs
-    self.groups = machines
+    self.instance_data = instance
 
-    try:
-      self.mp_model: ModelWrapper = ModelWrapper(solver_name='copt')
-    except Exception as e:
-      logger.warning("Cannot create an optimization wrapper")
-      self.mp_model = None
+  def mp_create_model(self):
+    # the mathematical formulation
+    #  based on lot-sizing and network flow
+    pass
 
-    # bool is flexible jsp
-    self.is_fjsp = 0
-    self.is_parallel = kwargs.get('para', False)
-    for g, m_list in machines.items():
-      if len(m_list) > 1:
-        self.is_fjsp = 1
-        break
+  def dump_instance(self, path, protocol='pickle'):
+    current_time = time.time()
+    if protocol == 'pickle':
+      with open(f'{path}/%d-{Plan.__name__}.pickle' % current_time, 'wb') as f:
+        # todo fix this. unable to pickle an inclass namedtuple
+        # switch to protobuf
+        pickle.dump(self.instance_data._asdict(), f)
+    else:
+      raise ValueError(f"protocol: {protocol} not implemented yet")
 
-    # attrs for constraint programming
-    self._ub_variable = \
-      sum(t.duration for job in self.jobs.values() for t in job.tasks)
+  def cp_create_model(self, *args, **kwargs):
+    pass
 
-    self.cp_vars = None
-    self.cp_model = None
-    self.cp_solver = None
-    self.cp_solution_printer = None
-    self.cp_status = None
-    self.cp_solution = None
+  def cp_extract_sol(self, *args, **kwargs):
+    pass
+
+  def mp_extract_sol(self, *args, **kwargs):
+    pass
 
   @staticmethod
-  def rd_instance(m: int, n: int, mu: float = 2, density: float = 0.8):
+  def rd_instance(m: int,
+                  n: int,
+                  tau: int,
+                  mu: float = 2,
+                  density: float = 0.8):
     """generate a random planning instance by modeling the BOM by a directed graph
           generally, the graph should be a DAG
           for each layer in 1..m, has a random number of items (uniform 1-n)
@@ -98,28 +111,52 @@ class Plan:
         m {int} -- num of layers
         n {int} -- num of items in each layer
 
-
       Keyword Arguments:
           mu {float} -- upper bound of edge weight, the multiplier for the bom pairs (default: {2})
           density {float} -- probability of having a edge in the bipartite subgraph (default: {0.8})
       """
-    nodes = {i: [j for j in range(random.randint(1, n))] for i in range(m)}
-    edges = {
+    # items
+    _nodes = {i: [j for j in range(random.randint(1, n))] for i in range(m)}
+    # edges of the bom tree
+    _edges = {
       (f'{j}#{i}', f'{j1}#{i1}'): random.random() * mu
       for i, i1 in zip(range(m)[:-1], range(m)[1:])
-      for j in nodes[i]
-      for j1 in nodes[i1]
+      for j in _nodes[i]
+      for j1 in _nodes[i1]
       if random.random() > 1 - density
     }
-    return edges
+    _items = functools.reduce(lambda x, y: set.union(x, y), _edges, set())
+    _raws = {i for i in _items if str.endswith(i, f"#{m - 1}")}
+    _products = _items.difference(_raws)
+    _time_scale = range(tau)
+    _inventory = {
+      (i, t): random.randint(1, 10) if i in _products
+      else random.randint(100, 200)
+      for i in _items for t in _time_scale}
+    _demand = {(i, t): random.randint(1, 100)
+               for i in _items for t in _time_scale}
+    _lead_time = {(i, t): random.randint(1, 5) for i in _products for t in _time_scale}
+
+    _instance = Plan.instance_container(
+      bom=_edges,
+      horizon=_time_scale,
+      items=_items,
+      raws=_raws,
+      products=_products,
+      lead_time=_lead_time,
+      demand=_demand,
+      inventory=_inventory
+    )
+
+    return _instance
 
 
 # alias
 plan_random_instance = Plan.rd_instance
 
 if __name__ == '__main__':
-  edges = plan_random_instance(4, 5, 2, 0.8)
-  data = bom_to_graph_mermaid(edges)
+  instance = plan_random_instance(4, 5, 7, 2, 0.8)
+  data = bom_to_graph_mermaid(instance.bom)
   render_meimaid_html(
     template_path=f'{UTIL_ASSET_PATH}/mermaid.template',
     record_path='',

@@ -21,12 +21,11 @@ import datetime
 import pickle
 import random
 from collections import defaultdict, namedtuple
-from typing import *
 
 from sched.jobshop.helper import *
 
 
-class JSP:
+class JSP(Problem):
   """
    An instance of Job Shop Scheduling Problem
   """
@@ -291,6 +290,8 @@ class JSP:
     else:
       render_meimaid_html(record_path=record_path,
                           fp=html_path)
+
+      self.logger.info("solution to gantt graph finished")
 
   # ===================
   # utility functions
