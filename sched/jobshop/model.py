@@ -29,6 +29,13 @@ class JSP(Problem):
   """
    An instance of Job Shop Scheduling Problem
   """
+
+  def mp_create_model(self, *args, **kwargs):
+    pass
+
+  def mp_extract_sol(self, *args, **kwargs):
+    pass
+
   __name__ = f"{__package__}.JSP"
   logger = logging.getLogger(__name__)
 
@@ -291,7 +298,8 @@ class JSP(Problem):
       render_meimaid_html(record_path=record_path,
                           fp=html_path)
 
-      self.logger.info("solution to gantt graph finished")
+      self.logger.info(f"solution to gantt graph finished\n"
+                       f"saved to {_dir}")
 
   # ===================
   # utility functions
